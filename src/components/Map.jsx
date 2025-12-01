@@ -51,15 +51,15 @@ export default function Map() {
   return (
     <div style={{ height: "100vh", width: "100%" }}>
       <MapContainer
-        center={[20, 0]}
+        center={[40.4168, -3.7038]}
         zoom={3}
-        minZoom={3}
+        minZoom={4}
         style={{ height: "100%", width: "100%" }}
       >
         <TileLayer
-          url="https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png"
-          attribution='&copy; <a href="https://www.stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://www.stamen.com/">Stamen Design</a> &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          maxZoom={20}
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          maxZoom={19}
         />
 
         {markers.map((m) => (
