@@ -11,11 +11,19 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import "./Styles.css";
 
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
+  iconUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
+  shadowUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
+});
+
 export default function Map() {
   const [activeMarker, setActiveMarker] = useState(null);
   const [markers, setMarkers] = useState([]);
-
-  console.log(markers);
 
   const customIcon = L.divIcon({
     html: ReactDOMServer.renderToString(
