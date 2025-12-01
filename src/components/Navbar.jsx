@@ -53,10 +53,6 @@ export default function Navbar() {
         },
         imageUrl: formData.imageUrl,
       });
-      <Alert severity="success">
-        <AlertTitle>Success</AlertTitle>
-        Marker agregado con éxito
-      </Alert>;
       setFormData({
         title: "",
         country: "",

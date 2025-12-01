@@ -5,8 +5,6 @@ import Navbar from "../components/Navbar";
 export default function Home({ user }) {
   const email = user?.email;
 
-  console.log("Usuario autenticado:", email);
-
   return (
     <div>
       {email === "admin@app.com" ? <Navbar /> : <></>}
