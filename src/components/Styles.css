@@ -1,0 +1,17 @@
+.image-container {
+  display: inline-block;
+  animation: floatUpDown 3s ease-in-out infinite alternate;
+  transform-style: preserve-3d;
+}
+
+@keyframes floatUpDown {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
