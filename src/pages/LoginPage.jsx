@@ -20,6 +20,7 @@ export default function LoginPage({ onLogin }) {
 
   useHotkeys(import.meta.env.VITE_HOT_KEY_FORM1, () => setFormVisible("form1"));
   useHotkeys(import.meta.env.VITE_HOT_KEY_FORM2, () => setFormVisible("form2"));
+
   useHotkeys("esc", () => setFormVisible(null));
 
   const handleLogin = async (e) => {

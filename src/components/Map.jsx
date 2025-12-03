@@ -4,7 +4,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import ReactDOMServer from "react-dom/server";
-import { Modal, Box, Typography, IconButton } from "@mui/material";
+import { Modal, Box, Typography, IconButton, Pagination } from "@mui/material";
 import { IoClose } from "react-icons/io5";
 import { getMonthName } from "../utils/MonthUtils";
 import { collection, getDocs } from "firebase/firestore";
@@ -24,6 +24,7 @@ L.Icon.Default.mergeOptions({
 export default function Map() {
   const [activeMarker, setActiveMarker] = useState(null);
   const [markers, setMarkers] = useState([]);
+  const [mapOption, setMapOption] = useState(1);
 
   const customIcon = L.divIcon({
     html: ReactDOMServer.renderToString(
@@ -34,6 +35,69 @@ export default function Map() {
   });
 
   const handleClose = () => setActiveMarker(null);
+
+  const renderTileLayer = () => {
+    switch (mapOption) {
+      case 1:
+        return (
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            maxZoom={19}
+          />
+        );
+      case 2:
+        return (
+          <TileLayer
+            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+            attribution="&copy; OpenStreetMap &copy; CARTO"
+            maxZoom={20}
+          />
+        );
+      case 3:
+        return (
+          <TileLayer
+            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            attribution="&copy; OpenStreetMap &copy; CARTO"
+            maxZoom={20}
+          />
+        );
+      case 4:
+        return (
+          <TileLayer
+            url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
+            attribution="&copy; Stadia Maps &copy; Stamen Design &copy; OpenMapTiles &copy; OpenStreetMap"
+            maxZoom={18}
+          />
+        );
+      case 5:
+        return (
+          <TileLayer
+            url="https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png"
+            attribution="&copy; Stadia Maps &copy; Stamen Design &copy; OpenMapTiles &copy; OpenStreetMap"
+            maxZoom={20}
+          />
+        );
+      case 6:
+        return (
+          <TileLayer
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+            attribution="&copy; Esri"
+            maxZoom={19}
+          />
+        );
+      case 7:
+        return (
+          <TileLayer
+            url="https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg"
+            attribution="&copy; Stadia Maps &copy; Stamen Design &copy; OpenStreetMap"
+            maxZoom={16}
+          />
+        );
+      default:
+        return null;
+    }
+  };
 
   useEffect(() => {
     const fetchMarkers = async () => {
@@ -50,17 +114,44 @@ export default function Map() {
 
   return (
     <div style={{ height: "100vh", width: "100%" }}>
+      <Box
+        sx={{
+          position: "absolute",
+          // top: 16,
+          top: 50,
+          right: 16,
+          zIndex: 1000,
+          padding: "8px 12px",
+          borderRadius: 2,
+          boxShadow: 3,
+          backgroundColor: "white",
+        }}
+      >
+        <Pagination
+          count={7}
+          page={mapOption}
+          onChange={(event, value) => setMapOption(value)}
+          size="medium"
+          color="primary"
+          variant="text"
+          shape="rounded"
+          defaultPage={1}
+        />
+      </Box>
       <MapContainer
         center={[40.4168, -3.7038]}
         zoom={3}
         minZoom={4}
+        maxZoom={18}
+        worldCopyJump={true}
+        maxBounds={[
+          [-85, -Infinity],
+          [85, Infinity],
+        ]}
+        maxBoundsViscosity={1.0}
         style={{ height: "100%", width: "100%" }}
       >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          maxZoom={19}
-        />
+        {renderTileLayer()}
 
         {markers.map((m) => (
           <Marker
