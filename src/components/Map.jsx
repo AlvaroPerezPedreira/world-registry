@@ -65,33 +65,9 @@ export default function Map() {
       case 4:
         return (
           <TileLayer
-            url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
-            attribution="&copy; Stadia Maps &copy; Stamen Design &copy; OpenMapTiles &copy; OpenStreetMap"
-            maxZoom={18}
-          />
-        );
-      case 5:
-        return (
-          <TileLayer
-            url="https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png"
-            attribution="&copy; Stadia Maps &copy; Stamen Design &copy; OpenMapTiles &copy; OpenStreetMap"
-            maxZoom={20}
-          />
-        );
-      case 6:
-        return (
-          <TileLayer
             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
             attribution="&copy; Esri"
             maxZoom={19}
-          />
-        );
-      case 7:
-        return (
-          <TileLayer
-            url="https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg"
-            attribution="&copy; Stadia Maps &copy; Stamen Design &copy; OpenStreetMap"
-            maxZoom={16}
           />
         );
       default:
@@ -117,8 +93,7 @@ export default function Map() {
       <Box
         sx={{
           position: "absolute",
-          // top: 16,
-          top: 50,
+          top: 16,
           right: 16,
           zIndex: 1000,
           padding: "8px 12px",
@@ -128,7 +103,7 @@ export default function Map() {
         }}
       >
         <Pagination
-          count={7}
+          count={4}
           page={mapOption}
           onChange={(event, value) => setMapOption(value)}
           size="medium"
