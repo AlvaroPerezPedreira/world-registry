@@ -1,6 +1,5 @@
-import React from "react";
-import Map from "../components/Map";
-import Navbar from "../components/Navbar";
+import Map from "../../components/map/Map";
+import Navbar from "../../components/navbar/Navbar";
 
 export default function Home({ user }) {
   const email = user?.email;

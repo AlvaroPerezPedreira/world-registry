@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { FaMapMarkerAlt } from "react-icons/fa";
-import ReactDOMServer from "react-dom/server";
-import { Modal, Box, Typography, IconButton, Pagination } from "@mui/material";
+import { Modal, Box, Typography, IconButton } from "@mui/material";
 import { IoClose } from "react-icons/io5";
-import { getMonthName } from "../utils/MonthUtils";
+import { getMonthName } from "../../utils/MonthUtils";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase/firebase";
-import "./Styles.css";
+import { db } from "../../firebase/firebase";
+import "./styles.css";
+import { getCustomIconByName } from "./customIcons";
+import MapPagination from "./MapPagination";
+import { renderTileLayer } from "./MapLayers";
+import { Button, useDisclosure } from "@nextui-org/react";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -24,56 +26,10 @@ L.Icon.Default.mergeOptions({
 export default function Map() {
   const [activeMarker, setActiveMarker] = useState(null);
   const [markers, setMarkers] = useState([]);
+  const [filteredMarkers, setFilteredMarkers] = useState([]);
   const [mapOption, setMapOption] = useState(1);
 
-  const customIcon = L.divIcon({
-    html: ReactDOMServer.renderToString(
-      <FaMapMarkerAlt size={32} color="red" />
-    ),
-    iconSize: [32, 32],
-    className: "custom-marker",
-  });
-
   const handleClose = () => setActiveMarker(null);
-
-  const renderTileLayer = () => {
-    switch (mapOption) {
-      case 1:
-        return (
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            maxZoom={19}
-          />
-        );
-      case 2:
-        return (
-          <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-            attribution="&copy; OpenStreetMap &copy; CARTO"
-            maxZoom={20}
-          />
-        );
-      case 3:
-        return (
-          <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-            attribution="&copy; OpenStreetMap &copy; CARTO"
-            maxZoom={20}
-          />
-        );
-      case 4:
-        return (
-          <TileLayer
-            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-            attribution="&copy; Esri"
-            maxZoom={19}
-          />
-        );
-      default:
-        return null;
-    }
-  };
 
   useEffect(() => {
     const fetchMarkers = async () => {
@@ -83,36 +39,15 @@ export default function Map() {
         ...doc.data(),
       }));
       setMarkers(markersData);
+      setFilteredMarkers(markers);
     };
 
     fetchMarkers();
-  }, []);
+  }, [markers]);
 
   return (
     <div style={{ height: "100vh", width: "100%" }}>
-      <Box
-        sx={{
-          position: "absolute",
-          top: 16,
-          right: 16,
-          zIndex: 1000,
-          padding: "8px 12px",
-          borderRadius: 2,
-          boxShadow: 3,
-          backgroundColor: "white",
-        }}
-      >
-        <Pagination
-          count={4}
-          page={mapOption}
-          onChange={(event, value) => setMapOption(value)}
-          size="medium"
-          color="primary"
-          variant="text"
-          shape="rounded"
-          defaultPage={1}
-        />
-      </Box>
+      <MapPagination mapOption={mapOption} setMapOption={setMapOption} />
       <MapContainer
         center={[40.4168, -3.7038]}
         zoom={3}
@@ -126,12 +61,12 @@ export default function Map() {
         maxBoundsViscosity={1.0}
         style={{ height: "100%", width: "100%" }}
       >
-        {renderTileLayer()}
+        {renderTileLayer(mapOption)}
 
-        {markers.map((m) => (
+        {filteredMarkers.map((m) => (
           <Marker
             key={m.id}
-            icon={customIcon}
+            icon={getCustomIconByName(m.data.visitor)}
             position={[m.location.lat, m.location.lon]}
             eventHandlers={{
               click: () => setActiveMarker(m),

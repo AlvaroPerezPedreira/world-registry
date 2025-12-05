@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Home from "./pages/Home";
-import LoginPage from "./pages/LoginPage";
+import Home from "./pages/home/Home";
+import LoginPage from "./pages/login/LoginPage";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 function App() {

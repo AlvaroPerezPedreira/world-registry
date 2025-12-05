@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { collection, addDoc } from "firebase/firestore";
-import { db } from "../firebase/firebase";
+import { db } from "../../firebase/firebase";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);

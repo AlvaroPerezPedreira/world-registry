@@ -1,23 +1,17 @@
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase/firebase";
+import { auth } from "../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import { useHotkeys } from "react-hotkeys-hook";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  TextField,
-  Typography,
-} from "@mui/material";
-import "./Styles.css";
+import { Box } from "@mui/material";
+import LoginForm from "../../components/login/LoginForm";
 
 export default function LoginPage({ onLogin }) {
   const [formVisible, setFormVisible] = useState(null);
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  useHotkeys("a", () => setFormVisible("form1"));
   useHotkeys(import.meta.env.VITE_HOT_KEY_FORM1, () => setFormVisible("form1"));
   useHotkeys(import.meta.env.VITE_HOT_KEY_FORM2, () => setFormVisible("form2"));
 
@@ -73,66 +67,19 @@ export default function LoginPage({ onLogin }) {
           minHeight: "100%",
           width: "auto",
           height: "auto",
-          transform: "translate(-50%, -50%) scale(0.6)",
+          transform: "translate(-50%, -50%) scale(1.5)",
           zIndex: -1,
-          objectFit: "contain",
+          objectFit: "cover",
         }}
       >
         <source src="/background.mp4" type="video/mp4" />
       </Box>
-
-      <Box
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          backgroundColor: "rgba(0, 0, 0, 0.3)",
-          zIndex: 0,
-        }}
-      />
-
       {formVisible && (
-        <Box
-          component="form"
-          onSubmit={handleLogin}
-          sx={{
-            position: "relative",
-            zIndex: 1,
-          }}
-        >
-          <Card
-            sx={{
-              minWidth: 300,
-              maxWidth: 400,
-              borderRadius: 3,
-              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
-              p: 2,
-              bgcolor: "rgba(255, 255, 255, 0.95)",
-              backdropFilter: "blur(10px)",
-            }}
-          >
-            <CardContent>
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-                <Typography variant="h5" gutterBottom align="center">
-                  {formVisible === "form1" ? "Admin" : "Anom"}
-                </Typography>
-                <TextField
-                  id="standard-basic"
-                  label="Password"
-                  type="password"
-                  variant="standard"
-                  onChange={(e) => setPassword(e.target.value)}
-                  fullWidth
-                />
-                <Button variant="contained" type="submit" fullWidth>
-                  Confirm
-                </Button>
-              </Box>
-            </CardContent>
-          </Card>
-        </Box>
+        <LoginForm
+          handleLogin={handleLogin}
+          formVisible={formVisible}
+          changePassword={(e) => setPassword(e.target.value)}
+        />
       )}
     </Box>
   );
