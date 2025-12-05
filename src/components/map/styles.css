@@ -1,5 +1,9 @@
 .image-container {
-  display: inline-block;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1rem;
   animation: floatUpDown 3s ease-in-out infinite alternate;
   transform-style: preserve-3d;
 }
@@ -13,6 +17,22 @@
   padding: 5px;
   border-radius: 26px;
   border: 2px solid #000;
+}
+
+.drawer-container .nextui-drawer-wrapper {
+  z-index: 9999 !important;
+}
+
+.drawer-container .nextui-drawer-content-wrapper {
+  z-index: 10000 !important;
+}
+
+.leaflet-container {
+  z-index: 10;
+}
+
+.map-wrapper {
+  z-index: 10;
 }
 
 @keyframes floatUpDown {

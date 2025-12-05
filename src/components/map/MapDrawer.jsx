@@ -1,23 +1,81 @@
-import {   Drawer,
+import {
+  Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerBody,
   DrawerFooter,
   Button,
-  useDisclosure,
   Image,
   Link,
   Tooltip,
   Avatar,
-  AvatarGroup, } from "@nextui-org/react";
+  AvatarGroup,
+  RangeCalendar,
+} from "@nextui-org/react";
+import "./styles.css";
+import { RiArrowRightDoubleLine } from "react-icons/ri";
+import { getMonthName } from "../../utils/MonthUtils";
+import { parseDate } from "@internationalized/date";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase/firebase";
+import { useEffect, useState } from "react";
 
+export default function MapDrawer({ isOpen, onOpenChange, marker }) {
+  const [visitors, setVisitors] = useState([]);
 
-export default function MapDrawer() {
-  const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  console.log(marker);
+
+  useEffect(() => {
+    const fetchReferencedVisitors = async () => {
+      if (!marker || !marker.data || !marker.data.visitors) {
+        setVisitors([]);
+        return;
+      }
+
+      const visitors = marker.data.visitors;
+      const visitorsWithDetails = [];
+
+      for (const visitor of visitors) {
+        if (visitor && typeof visitor === "object" && "_path" in visitor) {
+          try {
+            const userId =
+              visitor._path.segments[visitor._path.segments.length - 1];
+            const userDoc = await getDoc(doc(db, "users", userId));
+
+            if (userDoc.exists()) {
+              visitorsWithDetails.push({
+                id: userDoc.id,
+                name: userDoc.data().name,
+                url: userDoc.data().url,
+                isReference: true,
+              });
+            }
+          } catch (error) {
+            console.error("Error fetching user:", error);
+          }
+        } else if (typeof visitor === "string") {
+          visitorsWithDetails.push({
+            name: visitor,
+            isReference: false,
+          });
+        }
+      }
+
+      setVisitors(visitorsWithDetails);
+    };
+
+    if (isOpen && marker) {
+      fetchReferencedVisitors();
+    }
+  }, [marker, isOpen]);
+
+  if (!marker) {
+    return null;
+  }
 
   return (
-    <>
-      <DrawerBody
+    <div className="drawer-container">
+      <Drawer
         hideCloseButton
         backdrop="blur"
         classNames={{
@@ -38,288 +96,129 @@ export default function MapDrawer() {
                     variant="light"
                     onPress={onClose}
                   >
-                    <svg
-                      fill="none"
-                      height="20"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      width="20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="m13 17 5-5-5-5M6 17l5-5-5-5" />
-                    </svg>
+                    <RiArrowRightDoubleLine size={24} />
                   </Button>
                 </Tooltip>
-                <div className="w-full flex justify-start gap-2">
-                  <Button
-                    className="font-medium text-small text-default-500"
-                    size="sm"
-                    startContent={
-                      <svg
-                        height="16"
-                        viewBox="0 0 16 16"
-                        width="16"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M3.85.75c-.908 0-1.702.328-2.265.933-.558.599-.835 1.41-.835 2.29V7.88c0 .801.23 1.548.697 2.129.472.587 1.15.96 1.951 1.06a.75.75 0 1 0 .185-1.489c-.435-.054-.752-.243-.967-.51-.219-.273-.366-.673-.366-1.19V3.973c0-.568.176-.993.433-1.268.25-.27.632-.455 1.167-.455h4.146c.479 0 .828.146 1.071.359.246.215.43.54.497.979a.75.75 0 0 0 1.483-.23c-.115-.739-.447-1.4-.99-1.877C9.51 1 8.796.75 7.996.75zM7.9 4.828c-.908 0-1.702.326-2.265.93-.558.6-.835 1.41-.835 2.29v3.905c0 .879.275 1.69.833 2.289.563.605 1.357.931 2.267.931h4.144c.91 0 1.705-.326 2.268-.931.558-.599.833-1.41.833-2.289V8.048c0-.879-.275-1.69-.833-2.289-.563-.605-1.357-.931-2.267-.931zm-1.6 3.22c0-.568.176-.992.432-1.266.25-.27.632-.454 1.168-.454h4.145c.54 0 .92.185 1.17.453.255.274.43.698.43 1.267v3.905c0 .569-.175.993-.43 1.267-.25.268-.631.453-1.17.453H7.898c-.54 0-.92-.185-1.17-.453-.255-.274-.43-.698-.43-1.267z"
-                          fill="currentColor"
-                          fillRule="evenodd"
-                        />
-                      </svg>
-                    }
-                    variant="flat"
-                  >
-                    Copy Link
-                  </Button>
-                  <Button
-                    className="font-medium text-small text-default-500"
-                    endContent={
-                      <svg
-                        fill="none"
-                        height="16"
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        viewBox="0 0 24 24"
-                        width="16"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="M7 17 17 7M7 7h10v10" />
-                      </svg>
-                    }
-                    size="sm"
-                    variant="flat"
-                  >
-                    Event Page
-                  </Button>
-                </div>
-                <div className="flex gap-1 items-center">
-                  <Tooltip content="Previous">
-                    <Button isIconOnly className="text-default-500" size="sm" variant="flat">
-                      <svg
-                        fill="none"
-                        height="16"
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        viewBox="0 0 24 24"
-                        width="16"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="m18 15-6-6-6 6" />
-                      </svg>
-                    </Button>
-                  </Tooltip>
-                  <Tooltip content="Next">
-                    <Button isIconOnly className="text-default-500" size="sm" variant="flat">
-                      <svg
-                        fill="none"
-                        height="16"
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        viewBox="0 0 24 24"
-                        width="16"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="m6 9 6 6 6-6" />
-                      </svg>
-                    </Button>
-                  </Tooltip>
-                </div>
               </DrawerHeader>
               <DrawerBody className="pt-16">
-                <div className="flex w-full justify-center items-center pt-4">
+                <div className="flex flex-col gap-2">
+                  <h1 className="text-2xl font-bold leading-7">
+                    {marker.title}
+                  </h1>
+                  <div className="flex flex-row justify-between w-100 gap-1">
+                    <p className="text-md text-default-500">
+                      {marker.location.state}, {marker.location.country}
+                    </p>
+                    <p className="text-md text-default-500">
+                      {getMonthName(marker.data.date.month)},{" "}
+                      {marker.data.date.year}
+                    </p>
+                  </div>
+                </div>
+                <div className="image-container">
                   <Image
                     isBlurred
                     isZoomed
                     alt="Event image"
                     className="aspect-square w-full hover:scale-110"
                     height={300}
-                    src="https://nextuipro.nyc3.cdn.digitaloceanspaces.com/components-images/places/san-francisco.png"
+                    src={marker.imageUrl}
                   />
                 </div>
-                <div className="flex flex-col gap-2 py-4">
-                  <h1 className="text-2xl font-bold leading-7">SF Bay Area Meetup in November</h1>
-                  <p className="text-sm text-default-500">
-                    555 California St, San Francisco, CA 94103
-                  </p>
-                  <div className="mt-4 flex flex-col gap-3">
-                    <div className="flex gap-3 items-center">
-                      <div className="flex-none border-1 border-default-200/50 rounded-small text-center w-11 overflow-hidden">
-                        <div className="text-tiny bg-default-100 py-0.5 text-default-500">Nov</div>
-                        <div className="flex items-center justify-center font-semibold text-medium h-6 text-default-500">
-                          19
-                        </div>
-                      </div>
-                      <div className="flex flex-col gap-0.5">
-                        <p className="text-medium text-foreground font-medium">
-                          Tuesday, November 19
-                        </p>
-                        <p className="text-small text-default-500">5:00 PM - 9:00 PM PST</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-3 items-center">
-                      <div className="flex items-center justify-center border-1 border-default-200/50 rounded-small w-11 h-11">
-                        <svg
-                          className="text-default-500"
-                          height="20"
-                          viewBox="0 0 16 16"
-                          width="20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <g
-                            fill="none"
-                            fillRule="evenodd"
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="1.5"
-                          >
-                            <path d="M2 6.854C2 11.02 7.04 15 8 15s6-3.98 6-8.146C14 3.621 11.314 1 8 1S2 3.62 2 6.854" />
-                            <path d="M9.5 6.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
-                          </g>
-                        </svg>
-                      </div>
-                      <div className="flex flex-col gap-0.5">
-                        <Link
-                          isExternal
-                          showAnchorIcon
-                          anchorIcon={
-                            <svg
-                              className="group-hover:text-inherit text-default-400 transition-[color,transform] group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                              fill="none"
-                              height="16"
-                              stroke="currentColor"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              viewBox="0 0 24 24"
-                              width="16"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path d="M7 17 17 7M7 7h10v10" />
-                            </svg>
-                          }
-                          className="group gap-x-0.5 text-medium text-foreground font-medium"
-                          href="https://www.google.com/maps/place/555+California+St,+San+Francisco,+CA+94103"
-                          rel="noreferrer noopener"
-                        >
-                          555 California St suite 500
-                        </Link>
-                        <p className="text-small text-default-500">San Francisco, California</p>
-                      </div>
-                    </div>
-                    <div className="flex flex-col mt-4 gap-3 items-start">
-                      <span className="text-medium font-medium">About the event</span>
-                      <div className="text-medium text-default-500 flex flex-col gap-2">
-                        <p>
-                          Hey Bay Area! We are excited to announce our next meetup on Tuesday,
-                          November 19th.
-                        </p>
-                        <p>
-                          Join us for an evening of insightful discussions and hands-on workshops
-                          focused on the latest developments in web development and design. Our
-                          featured speakers will share their experiences with modern frontend
-                          frameworks, responsive design patterns, and emerging web technologies.
-                          You&apos;ll have the opportunity to network with fellow developers and
-                          designers while enjoying refreshments and snacks.
-                        </p>
-                        <p>
-                          During the main session, we&apos;ll dive deep into practical examples of
-                          building scalable applications, exploring best practices for component
-                          architecture, and understanding advanced state management techniques. Our
-                          interactive workshop portion will let you apply these concepts directly,
-                          with experienced mentors available to provide guidance and answer your
-                          questions. Whether you&apos;re a seasoned developer or just starting your
-                          journey, you&apos;ll find valuable takeaways from this session.
-                        </p>
 
-                        <p className="mt-4">
-                          Brought to you by the{" "}
-                          <Link className="text-default-700" href="https://heroui.com">
-                            HeroUI team
-                          </Link>
-                          .
+                <div className="flex flex-col gap-2 py-4">
+                  <h1 className="text-2xl font-bold leading-7">
+                    Datos del viaje
+                  </h1>
+                  <div className="flex flex-col pl-4 gap-1">
+                    <span className="text-medium font-medium">
+                      Persona: {marker.data.visitor}
+                    </span>
+                  </div>
+                  <div className="flex w-full justify-center items-center pt-4">
+                    {marker.data.date?.startDate &&
+                      marker.data.date?.endDate && (
+                        <RangeCalendar
+                          color="warning"
+                          isReadOnly
+                          aria-label="Date (Read Only)"
+                          value={{
+                            start: parseDate(marker.data.date.startDate),
+                            end: parseDate(marker.data.date.endDate),
+                          }}
+                        />
+                      )}
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    <div className="flex flex-col mt-4 gap-3 items-start">
+                      <span className="text-medium font-medium">
+                        Descripción del viaje
+                      </span>
+                      <div className="text-medium text-default-500 flex flex-col gap-2 pl-4">
+                        <p className="text-justify">
+                          {marker.data.description}
                         </p>
                       </div>
                     </div>
                     <div className="flex flex-col mt-4 gap-3 items-start">
-                      <span className="text-small text-default-500">Hosted By</span>
-                      <div className="flex gap-2 items-center">
-                        <Avatar
-                          name="HeroUI"
-                          size="sm"
-                          src="https://heroui.com/android-chrome-192x192.png"
-                        />
-                        <span className="text-small text-default-500">HeroUI Team</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col mt-4 gap-3 items-start">
-                      <span className="text-small text-default-500">105 Going</span>
-                      <div className="flex gap-2 items-center">
-                        <AvatarGroup
-                          isBordered
-                          classNames={{
-                            base: "pl-2",
-                            count: "text-default-500 text-tiny bg-default-100",
-                          }}
-                          size="sm"
-                          total={101}
-                        >
-                          <Tooltip content="Alex">
-                            <Avatar
-                              className="data-[hover=true]:translate-x-0!"
-                              name="Alex"
-                              src="https://i.pravatar.cc/150?u=a04258114e29026708c"
-                            />
-                          </Tooltip>
-                          <Tooltip content="Joe">
-                            <Avatar
-                              className="data-[hover=true]:translate-x-0!"
-                              name="Joe"
-                              src="https://i.pravatar.cc/150?u=a04258114e290267084"
-                            />
-                          </Tooltip>
-                          <Tooltip content="John">
-                            <Avatar
-                              className="data-[hover=true]:translate-x-0!"
-                              name="John"
-                              src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
-                            />
-                          </Tooltip>
-                          <Tooltip content="Jane">
-                            <Avatar
-                              className="data-[hover=true]:translate-x-0!"
-                              name="Jane"
-                              src="https://i.pravatar.cc/150?u=a04258114e29026702d"
-                            />
-                          </Tooltip>
-                        </AvatarGroup>
+                      <span className="text-medium font-medium">
+                        Visitantes
+                      </span>
+                      <div className="flex gap-2 pl-4 items-center">
+                        {marker.data.visitors &&
+                          marker.data.visitors.length > 0 && (
+                            // <AvatarGroup
+                            //   max={10}
+                            //   isBordered
+                            //   classNames={{
+                            //     base: "pl-2",
+                            //     count:
+                            //       "text-default-500 text-tiny bg-default-100",
+                            //   }}
+                            //   size="sm"
+                            // >
+                            //   {marker.data.visitors.map((visitor, index) => (
+                            //     <Tooltip key={index} content={visitor}>
+                            //       <Avatar
+                            //         color="warning"
+                            //         className="data-[hover=true]:translate-x-0!"
+                            //         name={visitor}
+                            //       />
+                            //     </Tooltip>
+                            //   ))}
+                            // </AvatarGroup>
+                            <AvatarGroup
+                              max={10}
+                              isBordered
+                              classNames={{
+                                base: "pl-2",
+                                count:
+                                  "text-default-500 text-tiny bg-default-100",
+                              }}
+                              size="sm"
+                            >
+                              {visitors.map((visitor, index) => (
+                                <Tooltip key={index} content={visitor.name}>
+                                  <Avatar
+                                    color="warning"
+                                    className="data-[hover=true]:translate-x-0!"
+                                    name={visitor.name}
+                                    src={visitor.url}
+                                  />
+                                </Tooltip>
+                              ))}
+                            </AvatarGroup>
+                          )}
                       </div>
                     </div>
                   </div>
                 </div>
               </DrawerBody>
-              <DrawerFooter className="flex flex-col gap-1">
-                <Link className="text-default-400" href="mailto:hello@heroui.com" size="sm">
-                  Contact the host
-                </Link>
-                <Link className="text-default-400" href="mailto:hello@heroui.com" size="sm">
-                  Report event
-                </Link>
-              </DrawerFooter>
             </>
           )}
         </DrawerContent>
       </Drawer>
-    </>
+    </div>
   );
 }
