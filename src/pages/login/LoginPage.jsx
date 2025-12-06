@@ -11,7 +11,7 @@ export default function LoginPage({ onLogin }) {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  useHotkeys("a", () => setFormVisible("form1"));
+  // useHotkeys("a", () => setFormVisible("form1"));
   useHotkeys(import.meta.env.VITE_HOT_KEY_FORM1, () => setFormVisible("form1"));
   useHotkeys(import.meta.env.VITE_HOT_KEY_FORM2, () => setFormVisible("form2"));
 
