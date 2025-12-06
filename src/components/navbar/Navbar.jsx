@@ -1,15 +1,8 @@
 import React, { useState } from "react";
-import {
-  Alert,
-  AlertTitle,
-  Box,
-  Button,
-  Modal,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
+import "./styles.css";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -24,6 +17,8 @@ export default function Navbar() {
     imageUrl: "",
     month: "",
     year: "",
+    startDate: "",
+    endDate: "",
   });
 
   const handleOpen = () => setOpen(true);
@@ -49,6 +44,8 @@ export default function Navbar() {
           date: {
             month: parseInt(formData.month),
             year: parseInt(formData.year),
+            startDate: formData.startDate,
+            endDate: formData.endDate,
           },
         },
         imageUrl: formData.imageUrl,
@@ -64,6 +61,8 @@ export default function Navbar() {
         imageUrl: "",
         month: "",
         year: "",
+        startDate: "",
+        endDate: "",
       });
       handleClose();
     } catch (err) {
@@ -73,7 +72,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav>
+    <nav className="navbar-container">
       <Box
         sx={{
           p: 2,
@@ -176,6 +175,22 @@ export default function Navbar() {
               name="year"
               type="number"
               value={formData.year}
+              onChange={handleChange}
+            />
+          </Box>
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <TextField
+              label="Fecha inicio"
+              name="startDate"
+              type="string"
+              value={formData.startDate}
+              onChange={handleChange}
+            />
+            <TextField
+              label="Fecha fin"
+              name="endDate"
+              type="string"
+              value={formData.endDate}
               onChange={handleChange}
             />
           </Box>
