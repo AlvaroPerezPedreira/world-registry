@@ -11,6 +11,7 @@ import {
   Avatar,
   AvatarGroup,
   RangeCalendar,
+  Skeleton,
 } from "@nextui-org/react";
 import "./styles.css";
 import { RiArrowRightDoubleLine } from "react-icons/ri";
@@ -22,16 +23,17 @@ import { useEffect, useState } from "react";
 
 export default function MapDrawer({ isOpen, onOpenChange, marker }) {
   const [visitors, setVisitors] = useState([]);
-
-  console.log(marker);
+  const [isLoadingVisitors, setIsLoadingVisitors] = useState(false);
 
   useEffect(() => {
     const fetchReferencedVisitors = async () => {
       if (!marker || !marker.data || !marker.data.visitors) {
         setVisitors([]);
+        setIsLoadingVisitors(false);
         return;
       }
 
+      setIsLoadingVisitors(true);
       const visitors = marker.data.visitors;
       const visitorsWithDetails = [];
 
@@ -62,6 +64,7 @@ export default function MapDrawer({ isOpen, onOpenChange, marker }) {
       }
 
       setVisitors(visitorsWithDetails);
+      setIsLoadingVisitors(false);
     };
 
     if (isOpen && marker) {
@@ -165,51 +168,41 @@ export default function MapDrawer({ isOpen, onOpenChange, marker }) {
                       <span className="text-medium font-medium">
                         Visitantes
                       </span>
-                      <div className="flex gap-2 pl-4 items-center">
-                        {marker.data.visitors &&
-                          marker.data.visitors.length > 0 && (
-                            // <AvatarGroup
-                            //   max={10}
-                            //   isBordered
-                            //   classNames={{
-                            //     base: "pl-2",
-                            //     count:
-                            //       "text-default-500 text-tiny bg-default-100",
-                            //   }}
-                            //   size="sm"
-                            // >
-                            //   {marker.data.visitors.map((visitor, index) => (
-                            //     <Tooltip key={index} content={visitor}>
-                            //       <Avatar
-                            //         color="warning"
-                            //         className="data-[hover=true]:translate-x-0!"
-                            //         name={visitor}
-                            //       />
-                            //     </Tooltip>
-                            //   ))}
-                            // </AvatarGroup>
-                            <AvatarGroup
-                              max={10}
-                              isBordered
-                              classNames={{
-                                base: "pl-2",
-                                count:
-                                  "text-default-500 text-tiny bg-default-100",
-                              }}
-                              size="sm"
-                            >
-                              {visitors.map((visitor, index) => (
-                                <Tooltip key={index} content={visitor.name}>
-                                  <Avatar
-                                    color="warning"
-                                    className="data-[hover=true]:translate-x-0!"
-                                    name={visitor.name}
-                                    src={visitor.url}
-                                  />
-                                </Tooltip>
-                              ))}
-                            </AvatarGroup>
-                          )}
+                      <div className="flex gap-2 pl-4 items-center min-h-8">
+                        {isLoadingVisitors ? (
+                          <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 rounded-full border-2 border-warning border-t-transparent animate-spin"></div>
+                            <span className="text-default-400 text-sm">
+                              Cargando visitantes...
+                            </span>
+                          </div>
+                        ) : visitors.length > 0 ? (
+                          <AvatarGroup
+                            max={10}
+                            isBordered
+                            classNames={{
+                              base: "pl-2",
+                              count:
+                                "text-default-500 text-tiny bg-default-100",
+                            }}
+                            size="sm"
+                          >
+                            {visitors.map((visitor, index) => (
+                              <Tooltip key={index} content={visitor.name}>
+                                <Avatar
+                                  color="warning"
+                                  className="data-[hover=true]:translate-x-0!"
+                                  name={visitor.name}
+                                  src={visitor.url}
+                                />
+                              </Tooltip>
+                            ))}
+                          </AvatarGroup>
+                        ) : (
+                          <span className="text-default-400 text-sm">
+                            No hay visitantes registrados
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>

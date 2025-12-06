@@ -3,11 +3,14 @@ import "./index.css";
 import App from "./App.jsx";
 import { BrowserRouter as Router } from "react-router-dom";
 import { NextUIProvider } from "@nextui-org/react";
+import { FilterProvider } from "./contexts/FilterContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <NextUIProvider>
     <Router>
-      <App />
+      <FilterProvider>
+        <App />
+      </FilterProvider>
     </Router>
   </NextUIProvider>
 );
