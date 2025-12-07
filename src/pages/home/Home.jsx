@@ -1,12 +1,19 @@
+import { useEffect } from "react";
 import Map from "../../components/map/Map";
 import Navbar from "../../components/navbar/Navbar";
+import { useMarkersStore } from "../../stores/MarkersStore";
 
-export default function Home({ user }) {
-  const email = user?.email;
+export default function Home() {
+  const { markers, fetchMarkers } = useMarkersStore();
+
+  useEffect(() => {
+    if (markers.length === 0) {
+      fetchMarkers();
+    }
+  }, [markers.length, fetchMarkers]);
 
   return (
     <div>
-      {email === "admin@app.com" ? <Navbar /> : <></>}
       <Map />
     </div>
   );

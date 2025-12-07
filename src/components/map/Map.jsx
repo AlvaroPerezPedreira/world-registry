@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase/firebase";
 import "./styles.css";
 import { getCustomIconByName } from "./customIcons";
 import MapPagination from "./MapPagination";
@@ -12,6 +10,7 @@ import { Button, useDisclosure } from "@nextui-org/react";
 import MapDrawer from "./MapDrawer";
 import MapFilter from "./MapFilter";
 import { GrFilter } from "react-icons/gr";
+import { useMarkers } from "../../hooks/useMarkers";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -37,23 +36,10 @@ export default function Map() {
   } = useDisclosure();
 
   const [activeMarker, setActiveMarker] = useState(null);
-  const [markers, setMarkers] = useState([]);
-  const [filteredMarkers, setFilteredMarkers] = useState([]);
   const [mapOption, setMapOption] = useState(1);
 
-  useEffect(() => {
-    const fetchMarkers = async () => {
-      const querySnapshot = await getDocs(collection(db, "markers"));
-      const markersData = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setMarkers(markersData);
-      setFilteredMarkers(markersData);
-    };
-
-    fetchMarkers();
-  }, []);
+  const { markers, filteredMarkers, isLoading, setFilteredMarkers } =
+    useMarkers();
 
   const handleMarkerClick = (marker) => {
     setActiveMarker(marker);
@@ -104,16 +90,18 @@ export default function Map() {
           >
             {renderTileLayer(mapOption)}
 
-            {filteredMarkers.map((m) => (
-              <Marker
-                key={m.id}
-                icon={getCustomIconByName(m.data.visitor)}
-                position={[m.location.lat, m.location.lon]}
-                eventHandlers={{
-                  click: () => handleMarkerClick(m),
-                }}
-              />
-            ))}
+            {isLoading
+              ? null
+              : filteredMarkers.map((m) => (
+                  <Marker
+                    key={m.id}
+                    icon={getCustomIconByName(m.data.visitor)}
+                    position={[m.location.lat, m.location.lon]}
+                    eventHandlers={{
+                      click: () => handleMarkerClick(m),
+                    }}
+                  />
+                ))}
           </MapContainer>
         </div>
         <MapDrawer

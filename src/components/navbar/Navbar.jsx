@@ -3,8 +3,10 @@ import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import "./styles.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
@@ -26,6 +28,10 @@ export default function Navbar() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleGlobe = () => {
+    navigate("/globe");
   };
 
   const handleSubmit = async () => {
@@ -85,6 +91,7 @@ export default function Navbar() {
         <Typography variant="h5" color="primary">
           World Registry - Panel de Administración
         </Typography>
+        <Button onClick={handleGlobe}>Globe</Button>
         <Button variant="contained" color="primary" onClick={handleOpen}>
           Añadir Marker
         </Button>
