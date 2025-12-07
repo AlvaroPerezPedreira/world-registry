@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useMarkersStore } from "../stores/MarkersStore.js";
+import { useMarkersStore } from "../stores/MarkersStore";
 
 export const useMarkers = () => {
   const {
