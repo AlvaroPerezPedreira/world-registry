@@ -1,12 +1,9 @@
 import Map from "../../components/map/Map";
 import Navbar from "../../components/navbar/Navbar";
 
-export default function Home({ user }) {
-  const email = user?.email;
-
+export default function Home() {
   return (
     <div>
-      {email === "admin@app.com" ? <Navbar /> : <></>}
       <Map />
     </div>
   );
