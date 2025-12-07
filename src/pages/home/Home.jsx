@@ -1,19 +1,53 @@
-import { useEffect } from "react";
-import Map from "../../components/map/Map";
-import { useMarkersStore } from "../../stores/MarkersStore.js";
+import "./styles.css";
+import { Button } from "@nextui-org/react";
+import { FaMapLocationDot } from "react-icons/fa6";
+import { MdQueryStats } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
-  const { markers, fetchMarkers } = useMarkersStore();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (markers.length === 0) {
-      fetchMarkers();
-    }
-  }, [markers.length, fetchMarkers]);
+  const handleMap = () => {
+    navigate("/map-dashboard");
+  };
 
   return (
-    <div>
-      <Map />
+    <div className="home-container">
+      <div className="home-stars-layer-1" />
+      <div className="home-stars-layer-2" />
+      <div className="home-stars-layer-3" />
+      <div className="home-stars-layer-4" />
+      <div className="home-line" />
+      <div className="home-button-container">
+        <Button
+          color="warning"
+          variant="bordered"
+          isIconOnly
+          radius="full"
+          className="w-12 h-12 flex items-center justify-center"
+          onPress={handleMap}
+        >
+          <FaMapLocationDot size={24} />
+        </Button>
+        <Button
+          color="warning"
+          variant="bordered"
+          isIconOnly
+          radius="full"
+          className="w-12 h-12 flex items-center justify-center"
+          onPress={handleMap}
+        >
+          <MdQueryStats size={24} />
+        </Button>
+      </div>
+      <h1>
+        <em>H</em>
+        <em className="home-planet left">O</em>
+        <em>R</em>
+        <em>Z</em>
+        <em className="home-planet right">O</em>
+        <em>N</em>
+      </h1>
     </div>
   );
 }

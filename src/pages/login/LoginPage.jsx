@@ -36,7 +36,7 @@ export default function LoginPage({ onLogin }) {
         password
       );
       onLogin(userCredential.user);
-      navigate("/map-dashboard");
+      navigate("/home");
     } catch (error) {
       alert("Contraseña incorrecta", error.message);
     }
