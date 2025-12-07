@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import Map from "../../components/map/Map";
-import { useMarkersStore } from "../../stores/MarkersStore";
+import { useMarkersStore } from "../../stores/MarkersStore.js";
 
 export default function Home() {
   const { markers, fetchMarkers } = useMarkersStore();
