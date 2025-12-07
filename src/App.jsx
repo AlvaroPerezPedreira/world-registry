@@ -3,7 +3,6 @@ import Home from "./pages/home/Home";
 import LoginPage from "./pages/login/LoginPage";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/navbar/Navbar";
-import Globe from "./pages/globe/Globe";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -18,10 +17,6 @@ function App() {
         <Route
           path="/map-dashboard"
           element={user ? <Home /> : <Navigate to="/" replace />}
-        />
-        <Route
-          path="/globe"
-          element={user ? <Globe /> : <Navigate to="/" replace />}
         />
       </Routes>
     </>

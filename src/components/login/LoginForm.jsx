@@ -23,6 +23,8 @@ export default function LoginForm({
             color="warning"
             variant="underlined"
             label="Password"
+            autoComplete="current-password"
+            aria-autocomplete="password"
             classNames={{
               label: [
                 "!text-white",
