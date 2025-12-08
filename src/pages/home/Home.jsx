@@ -40,13 +40,13 @@ export default function Home() {
           <MdQueryStats size={24} />
         </Button>
       </div>
-      <h1>
-        <em>H</em>
-        <em className="home-planet left">O</em>
-        <em>R</em>
-        <em>Z</em>
-        <em className="home-planet right">O</em>
-        <em>N</em>
+      <h1 className="home-title">
+        <em className="home-title-letter">H</em>
+        <em className="home-title-letter home-planet left">O</em>
+        <em className="home-title-letter">R</em>
+        <em className="home-title-letter">Z</em>
+        <em className="home-title-letter home-planet right">O</em>
+        <em className="home-title-letter">N</em>
       </h1>
     </div>
   );

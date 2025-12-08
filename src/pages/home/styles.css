@@ -178,7 +178,7 @@
     48vw 28vh 0.1vmin rgba(200, 255, 230, 0.7);
 }
 
-h1 {
+.home-title {
   margin: 0;
   height: 10vmin;
   width: 100vmin;
@@ -188,7 +188,7 @@ h1 {
   z-index: 10;
 }
 
-h1::before {
+.home-title::before {
   content: "";
   display: block;
   position: absolute;
@@ -202,7 +202,7 @@ h1::before {
   box-sizing: border-box;
 }
 
-em {
+.home-title-letter {
   font-family: "Josefin Sans", sans-serif;
   color: currentColor;
   font-size: 12.5vmin;
@@ -214,12 +214,12 @@ em {
   line-height: 1;
 }
 
-em.home-planet {
+.home-title-letter.home-planet {
   animation: planet-rotate 4s linear infinite;
   position: relative;
 }
 
-em.home-planet::before {
+.home-title-letter.home-planet::before {
   content: "";
   position: absolute;
   z-index: -1;
@@ -231,12 +231,12 @@ em.home-planet::before {
   height: 10.8vmin;
 }
 
-em.home-planet.left {
+.home-title-letter.home-planet.left {
   transform-origin: 33.3vmin 4.2vmin;
   margin-top: -1vmin;
 }
 
-em.home-planet.right {
+.home-title-letter.home-planet.right {
   transform-origin: -16.7vmin 4.2vmin;
   margin-top: -1vmin;
 }
