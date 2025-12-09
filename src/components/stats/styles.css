@@ -1,0 +1,50 @@
+.countryMap-container {
+  width: 100%;
+  height: 100dvh;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 20px;
+  padding: 20px;
+  background-color: white;
+}
+
+.countryMap-info {
+  grid-column: 1 / 3;
+  grid-row: 1 / 7;
+}
+
+.countryMap-map {
+  grid-column: 3 / 7;
+  grid-row: 1 / 7;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.countryMap-map .leaflet-container {
+  height: 100% !important;
+  width: 100% !important;
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.countryMap-map .leaflet-map-pane {
+  cursor: grab;
+}
+
+.countryMap-filter {
+  width: 100%;
+  padding: 10px;
+  padding-left: 24px;
+  background-color: white;
+}
+
+.countryMap-filter-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}

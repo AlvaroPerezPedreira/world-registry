@@ -11,6 +11,10 @@ export default function Home() {
     navigate("/map-dashboard");
   };
 
+  const handleStats = () => {
+    navigate("/stats");
+  };
+
   return (
     <div className="home-container">
       <div className="home-stars-layer-1" />
@@ -35,7 +39,7 @@ export default function Home() {
           isIconOnly
           radius="full"
           className="w-12 h-12 flex items-center justify-center"
-          onPress={handleMap}
+          onPress={handleStats}
         >
           <MdQueryStats size={24} />
         </Button>

@@ -4,6 +4,7 @@ import LoginPage from "./pages/login/LoginPage";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/navbar/Navbar";
 import MapsPage from "./pages/map/MapsPage";
+import StatsPage from "./pages/stats/StatsPage";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -22,6 +23,10 @@ function App() {
         <Route
           path="/map-dashboard"
           element={user ? <MapsPage /> : <Navigate to="/" replace />}
+        />
+        <Route
+          path="/stats"
+          element={user ? <StatsPage /> : <Navigate to="/" replace />}
         />
       </Routes>
     </>
