@@ -6,6 +6,7 @@ import { useMarkers } from "../../hooks/useMarkers";
 import countryMappings from "../../utils/CountryMapUtils";
 import { tr } from "framer-motion/client";
 import CountryMapFilter from "./CountryMapFilter";
+import CountryMapBarChart from "./CountryMapBarChart";
 
 // Datos GeoJSON de países
 const countriesGeoJSON =
@@ -13,7 +14,7 @@ const countriesGeoJSON =
 
 export default function CountryMap() {
   const [countries, setCountries] = useState(null);
-  const [color, setColor] = useState("#4A4A4A");
+  const [color, setColor] = useState("#3b82f6");
   const [selectedCountries, setSelectedCountries] = useState(new Set());
   const { uniqueCountries, uniqueLCountries, uniqueACountries } = useMarkers();
 
@@ -52,13 +53,13 @@ export default function CountryMap() {
   return (
     <div className="countryMap-container">
       <div className="countryMap-info">
-        <div className="controls-info">
-          <CountryMapFilter
-            setColor={setColor}
-            selectedCountries={selectedCountries}
-            setSelectedCountries={setSelectedCountries}
-          />
-        </div>
+        <CountryMapFilter
+          setColor={setColor}
+          selectedCountries={selectedCountries}
+          setSelectedCountries={setSelectedCountries}
+        />
+        <div className="h-full" />
+        <CountryMapBarChart />
       </div>
 
       <div className="countryMap-map">

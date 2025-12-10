@@ -6,10 +6,10 @@ export default function StatsPage() {
   return (
     <div className="stats-container">
       <div className="stats-content">
-        <div className="stats-countryMap-info"></div>
-        <div className="stats-countryMap-map">
+        <div className="stats-section-top">
           <CountryMap />
         </div>
+        <div className="stats-section-bottom"></div>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useMarkers } from "../../hooks/useMarkers";
 import countryMappings from "../../utils/CountryMapUtils";
 import { Radio, RadioGroup } from "@nextui-org/react";
-import { BarChart } from "@mui/x-charts";
+import { TbUserStar } from "react-icons/tb";
 
 export default function CountryMapFilter({ setColor, setSelectedCountries }) {
   const { uniqueCountries, uniqueLCountries, uniqueACountries } = useMarkers();
@@ -19,7 +19,7 @@ export default function CountryMapFilter({ setColor, setSelectedCountries }) {
   const handleValueChange = (value) => {
     if (value === "all") {
       setSelectedCountries(new Set(convertToEnglishNames(uniqueCountries)));
-      setColor("#9B9B9B");
+      setColor("#3b82f6");
       setSelectedValue("all");
     } else if (value === "lara") {
       setSelectedCountries(new Set(convertToEnglishNames(uniqueLCountries)));
@@ -27,18 +27,20 @@ export default function CountryMapFilter({ setColor, setSelectedCountries }) {
       setSelectedValue("lara");
     } else if (value === "alvaro") {
       setSelectedCountries(new Set(convertToEnglishNames(uniqueACountries)));
-      setColor("#4A90E2");
+      setColor("#10b981");
       setSelectedValue("alvaro");
     } else {
       setSelectedCountries(new Set(convertToEnglishNames(uniqueCountries)));
-      setColor("#9B9B9B");
+      setColor("#3b82f6");
       setSelectedValue("all");
     }
   };
 
   return (
     <div className="countryMap-filter">
-      <h1 className="countryMap-filter-title">Filtrar por usuario</h1>
+      <h1 className="countryMap-filter-title">
+        <TbUserStar size={24} /> Filtrar por usuario
+      </h1>
       <div className="pl-4">
         <RadioGroup
           color="warning"
@@ -51,7 +53,6 @@ export default function CountryMapFilter({ setColor, setSelectedCountries }) {
           <Radio value="alvaro">Álvaro</Radio>
         </RadioGroup>
       </div>
-      <div>{/* <BarChart dataSet={selectedValue} /> */}</div>
     </div>
   );
 }
