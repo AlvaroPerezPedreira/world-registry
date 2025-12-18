@@ -3,8 +3,8 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import { useHotkeys } from "react-hotkeys-hook";
-import { Box } from "@mui/material";
 import LoginForm from "../../components/login/LoginForm";
+import "../../components/login/styles.css";
 
 export default function LoginPage({ onLogin }) {
   const [formVisible, setFormVisible] = useState(null);
@@ -43,37 +43,19 @@ export default function LoginPage({ onLogin }) {
   };
 
   return (
-    <Box
-      sx={{
-        position: "relative",
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        overflow: "hidden",
-      }}
-    >
-      <Box
-        component="video"
+    <div className="relative h-screen flex justify-center items-center overflow-hidden">
+      {/* Video background */}
+      <video
         autoPlay
         muted
         loop
         playsInline
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          minWidth: "100%",
-          minHeight: "100%",
-          width: "auto",
-          height: "auto",
-          transform: "translate(-50%, -50%) scale(1.5)",
-          zIndex: -1,
-          objectFit: "cover",
-        }}
+        className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 scale-150 -z-10 object-cover"
       >
         <source src="/background.mp4" type="video/mp4" />
-      </Box>
+      </video>
+
+      {/* Login form */}
       {formVisible && (
         <LoginForm
           handleLogin={handleLogin}
@@ -81,6 +63,6 @@ export default function LoginPage({ onLogin }) {
           changePassword={(e) => setPassword(e.target.value)}
         />
       )}
-    </Box>
+    </div>
   );
 }

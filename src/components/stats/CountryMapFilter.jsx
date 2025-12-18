@@ -37,16 +37,20 @@ export default function CountryMapFilter({ setColor, setSelectedCountries }) {
   };
 
   return (
-    <div className="countryMap-filter">
-      <h1 className="countryMap-filter-title">
-        <TbUserStar size={24} /> Filtrar por usuario
+    <div className="w-full bg-white rounded-2xl shadow-card p-4 sm:p-6">
+      <h1 className="flex items-center gap-3 text-lg sm:text-xl font-bold text-gray-900 mb-4">
+        <TbUserStar size={24} className="text-stats-blue" />
+        <span>Filtrar por usuario</span>
       </h1>
-      <div className="pl-4">
+      <div className="pl-4 sm:pl-6">
         <RadioGroup
           color="warning"
           orientation="vertical"
           value={selectedValue}
           onValueChange={handleValueChange}
+          classNames={{
+            wrapper: "gap-3"
+          }}
         >
           <Radio value="all">Todos</Radio>
           <Radio value="lara">Lara</Radio>

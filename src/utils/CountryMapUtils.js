@@ -149,6 +149,28 @@ export const continents = [
   "Oceanía",
 ];
 
+// Constante para los continentes (usado en gráficos)
+export const CONTINENTS = [
+  "Europa",
+  "América del Norte",
+  "América Central",
+  "América del Sur",
+  "Asia",
+  "Oceanía",
+  "África",
+];
+
+// Número total de países por continente (para calcular ratios)
+export const COUNTRIES_PER_CONTINENT = {
+  Europa: 44,
+  "América del Norte": 3,
+  "América Central": 7,
+  "América del Sur": 12,
+  Asia: 49,
+  Oceanía: 14,
+  África: 54,
+};
+
 // Grupos de países por región
 export const countryRegions = {
   europa: [

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useState, useRef } from "react";
 import { BarChart } from "@mui/x-charts";
 import { useMarkers } from "../../hooks/useMarkers";
 import { getContinent } from "../../utils/CountryMapUtils";
@@ -6,9 +6,25 @@ import { VscGraph } from "react-icons/vsc";
 
 export default function CountryMapBarChart() {
   const { uniqueCountries, uniqueLCountries, uniqueACountries } = useMarkers();
+  const containerRef = useRef(null);
+  const [dimensions, setDimensions] = useState({ width: 400, height: 450 });
 
-  console.log("L:", uniqueLCountries);
-  console.log("A:", uniqueACountries);
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        const { width } = entry.contentRect;
+        setDimensions({
+          width: Math.max(280, width - 48),
+          height: Math.max(350, Math.min(500, width * 0.9))
+        });
+      }
+    });
+
+    resizeObserver.observe(containerRef.current);
+    return () => resizeObserver.disconnect();
+  }, []);
 
   const continentStats = useMemo(() => {
     const getCountsByContinent = (countries) => {
@@ -59,22 +75,28 @@ export default function CountryMapBarChart() {
   }));
 
   return (
-    <div className="countryMap-barChart">
-      <h1 className="countryMap-barChart-title">
-        <VscGraph size={24} /> Gráfico de barras por continente
+    <div
+      ref={containerRef}
+      className="w-full bg-white rounded-2xl shadow-card p-4 sm:p-6 overflow-hidden"
+    >
+      <h1 className="flex items-center gap-3 text-lg sm:text-xl font-bold text-gray-900 mb-6">
+        <VscGraph size={24} className="text-stats-blue" />
+        <span>Gráfico por continente</span>
       </h1>
-      <BarChart
-        dataset={chartData}
-        yAxis={[{ scaleType: "band", dataKey: "continent" }]}
-        series={[
-          { dataKey: "total", label: "Total", color: "#3b82f6" },
-          { dataKey: "lara", label: "Lara", color: "#FF6FAF" },
-          { dataKey: "alvaro", label: "Álvaro", color: "#10b981" },
-        ]}
-        layout="horizontal"
-        width={400}
-        height={400}
-      />
+      <div className="w-full flex justify-center">
+        <BarChart
+          dataset={chartData}
+          yAxis={[{ scaleType: "band", dataKey: "continent" }]}
+          series={[
+            { dataKey: "total", label: "Total", color: "#3b82f6" },
+            { dataKey: "lara", label: "Lara", color: "#FF6FAF" },
+            { dataKey: "alvaro", label: "Álvaro", color: "#10b981" },
+          ]}
+          layout="horizontal"
+          width={dimensions.width}
+          height={dimensions.height}
+        />
+      </div>
     </div>
   );
 }

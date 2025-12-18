@@ -1,38 +1,5 @@
-.countryMap-container {
-  width: 100%;
-  height: 100%;
-  min-height: 85dvh;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: repeat(6, 1fr);
-  gap: 20px;
-  padding: 20px;
-  background-color: white;
-}
-
-.countryMap-info {
-  grid-column: 1 / 3;
-  grid-row: 1 / 7;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 5px 10px rgba(0, 0, 0, 0.1);
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-}
-
-.countryMap-map {
-  grid-column: 3 / 7;
-  grid-row: 1 / 7;
-  position: relative;
-  overflow: hidden;
-  border-radius: 8px;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 5px 10px rgba(0, 0, 0, 0.1);
-  padding: 24px;
-}
-
-.countryMap-map .leaflet-container {
+/* Leaflet map container overrides - Required for proper map rendering */
+.countryMap-leaflet-container .leaflet-container {
   height: 100% !important;
   width: 100% !important;
   position: absolute !important;
@@ -40,48 +7,13 @@
   left: 0;
   right: 0;
   bottom: 0;
+  border-radius: 1rem;
 }
 
-.countryMap-map .leaflet-map-pane {
+.countryMap-leaflet-container .leaflet-map-pane {
   cursor: grab;
 }
 
-.countryMap-filter {
-  width: 100%;
-  padding: 10px;
-  padding-left: 24px;
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 5px 10px rgba(0, 0, 0, 0.1);
-  padding: 24px;
-}
-
-.countryMap-filter-title {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.countryMap-barChart-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 36px;
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-}
-
-.countryMap-barChart {
-  width: 100%;
-  padding: 10px;
-  padding-left: 24px;
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 5px 10px rgba(0, 0, 0, 0.1);
-  padding: 24px;
+.countryMap-leaflet-container .leaflet-map-pane:active {
+  cursor: grabbing;
 }
