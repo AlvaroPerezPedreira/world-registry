@@ -1,7 +1,8 @@
 import React, { useMemo, useEffect, useState, useRef } from "react";
 import { RadarChart } from "@mui/x-charts";
 import {
-  CONTINENTS,
+  continentCodes,
+  continents,
   COUNTRIES_PER_CONTINENT,
   getContinent,
 } from "../../utils/CountryMapUtils";
@@ -54,7 +55,7 @@ export default function CountryMapHexChart() {
 
   const chartData = useMemo(() => {
     const calculateRatios = (stats) => {
-      return CONTINENTS.map((continent) => {
+      return continents.map((continent) => {
         const visited = stats[continent] || 0;
         const total = COUNTRIES_PER_CONTINENT[continent];
         return (visited / total) * 100;
@@ -100,7 +101,7 @@ export default function CountryMapHexChart() {
             },
           ]}
           radar={{
-            metrics: CONTINENTS,
+            metrics: continents.map((continent) => continentCodes[continent]),
             max: 100,
           }}
         />

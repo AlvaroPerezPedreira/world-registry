@@ -91,6 +91,65 @@ export const useMarkersStore = create((set, get) => ({
     return Array.from(countriesSet).sort();
   },
 
+  getTripsPerYear: () => {
+    const state = get();
+    const tripsPerYear = {};
+
+    state.markers.forEach((marker) => {
+      if (marker.data && marker.data.date && marker.data.date.year) {
+        const year = marker.data.date.year;
+
+        // Ignorar si el año es NaN
+        if (!isNaN(year) && year !== null && year !== undefined) {
+          if (tripsPerYear[year]) {
+            tripsPerYear[year]++;
+          } else {
+            tripsPerYear[year] = 1;
+          }
+        }
+      }
+    });
+
+    // Devolver el objeto ordenado por año (opcional)
+    return Object.keys(tripsPerYear)
+      .sort((a, b) => Number(a) - Number(b))
+      .reduce((acc, year) => {
+        acc[year] = tripsPerYear[year];
+        return acc;
+      }, {});
+  },
+
+  getTripsPerYearByVisitor: () => {
+    const state = get();
+    const tripsPerYear = {
+      total: {},
+      lara: {},
+      alvaro: {},
+    };
+
+    state.markers.forEach((marker) => {
+      if (marker.data && marker.data.date && marker.data.date.year) {
+        const year = marker.data.date.year;
+
+        if (!isNaN(year) && year !== null && year !== undefined) {
+          // Total - contar solo una vez por marker
+          tripsPerYear.total[year] = (tripsPerYear.total[year] || 0) + 1;
+
+          // Si no existe el array, usar visitor (campo individual)
+          if (marker.data.visitor) {
+            if (marker.data.visitor === "Lara") {
+              tripsPerYear.lara[year] = (tripsPerYear.lara[year] || 0) + 1;
+            } else if (marker.data.visitor === "Álvaro") {
+              tripsPerYear.alvaro[year] = (tripsPerYear.alvaro[year] || 0) + 1;
+            }
+          }
+        }
+      }
+    });
+
+    return tripsPerYear;
+  },
+
   // filterByCountry: (country) => {
   //   const state = get();
   //   if (!country) {

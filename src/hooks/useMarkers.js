@@ -13,6 +13,8 @@ export const useMarkers = () => {
     fetchMarkers,
     setFilteredMarkers,
     resetFilters,
+    getTripsPerYear,
+    getTripsPerYearByVisitor,
   } = useMarkersStore();
 
   useEffect(() => {
@@ -32,5 +34,7 @@ export const useMarkers = () => {
     setFilteredMarkers,
     resetFilters,
     refetch: fetchMarkers,
+    getTripsPerYear,
+    getTripsPerYearByVisitor,
   };
 };

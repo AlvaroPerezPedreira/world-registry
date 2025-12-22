@@ -1,7 +1,11 @@
 import React, { useMemo, useEffect, useState, useRef } from "react";
 import { BarChart } from "@mui/x-charts";
 import { useMarkers } from "../../hooks/useMarkers";
-import { getContinent } from "../../utils/CountryMapUtils";
+import {
+  continentCodes,
+  continents,
+  getContinent,
+} from "../../utils/CountryMapUtils";
 import { VscGraph } from "react-icons/vsc";
 
 export default function CountryMapBarChart() {
@@ -17,7 +21,7 @@ export default function CountryMapBarChart() {
         const { width } = entry.contentRect;
         setDimensions({
           width: Math.max(280, width - 48),
-          height: Math.max(350, Math.min(500, width * 0.9))
+          height: Math.max(350, Math.min(500, width * 0.9)),
         });
       }
     });
@@ -46,26 +50,6 @@ export default function CountryMapBarChart() {
       alvaro: getCountsByContinent(uniqueACountries),
     };
   }, [uniqueCountries, uniqueLCountries, uniqueACountries]);
-
-  const continentCodes = {
-    Europa: "EU",
-    "América del Norte": "NA",
-    "América del Sur": "SA",
-    "América Central": "CA",
-    Asia: "AS",
-    África: "AF",
-    Oceanía: "OC",
-  };
-
-  const continents = [
-    "Europa",
-    "América del Norte",
-    "América del Sur",
-    "América Central",
-    "Asia",
-    "África",
-    "Oceanía",
-  ];
 
   const chartData = continents.map((continent) => ({
     continent: continentCodes[continent],

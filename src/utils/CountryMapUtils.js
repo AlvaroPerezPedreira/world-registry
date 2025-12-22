@@ -150,15 +150,15 @@ export const continents = [
 ];
 
 // Constante para los continentes (usado en gráficos)
-export const CONTINENTS = [
-  "Europa",
-  "América del Norte",
-  "América Central",
-  "América del Sur",
-  "Asia",
-  "Oceanía",
-  "África",
-];
+export const continentCodes = {
+  Europa: "EU",
+  "América del Norte": "NA",
+  "América del Sur": "SA",
+  "América Central": "CA",
+  Asia: "AS",
+  África: "AF",
+  Oceanía: "OC",
+};
 
 // Número total de países por continente (para calcular ratios)
 export const COUNTRIES_PER_CONTINENT = {
